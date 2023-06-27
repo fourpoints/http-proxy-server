@@ -28,6 +28,12 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             url = self._proxy_url
             resp = requests.get(url)
 
+            self.log_message('PROXY "%s" %s %s',
+                f"GET {url} HTTP/{resp.raw.version / 10}",
+                str(resp.status_code),
+                str(resp.headers.get("content-length", "-")),
+            )
+
             # send_head
             self.send_response(resp.status_code)
             for key, value in resp.headers.items():
